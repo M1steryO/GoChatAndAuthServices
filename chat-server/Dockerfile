@@ -4,7 +4,7 @@ COPY . /m1stery18/github.com/TestGoProject/chat-server/source
 WORKDIR /m1stery18/github.com/TestGoProject/chat-server/source
 
 RUN go mod download
-RUN go build -o /bin/chat-server cmd/chat-server/main.go
+RUN go build -o ./bin/chat-server cmd/chat-server/main.go
 
 FROM alpine:latest
 
