@@ -11,4 +11,4 @@ FROM alpine:latest
 WORKDIR /root/
 COPY --from=builder /m1stery18/github.com/TestGoProject/auth/source/bin/auth .
 
-CMD ["./auth"]
+CMD ["./auth", "-config-path", "config/local.env"]
