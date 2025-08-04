@@ -25,12 +25,12 @@ jobs:
           cache-dependency-path: go.sum
       - name: Build
         run: |
-          cd auth/
+          cd chat-server/
           go build -o ./bin/ -v ./...
 
       - name: Test
         run: |
-          cd auth/
+          cd chat-server/
           go test -v ./...
   linter:
     name: lint
@@ -47,7 +47,7 @@ jobs:
           # Require: The version of golangci-lint to use.
           # When `install-mode` is `binary` (default) the value can be v1.2 or v1.2.3 or `latest` to use the latest version.
           # When `install-mode` is `goinstall` the value can be v1.2.3, `latest`, or the hash of a commit.
-          version: latest
+          version: v1.61
 
           # Optional: working directory, useful for monorepos
           # working-directory: somedir
@@ -56,7 +56,7 @@ jobs:
           #
           # Note: By default, the `.golangci.yml` file should be at the root of the repository.
           # The location of the configuration file can be changed by using `--config=`
-          args: --timeout=30m --config=./auth/.golangci.pipeline.yaml
+          args: --timeout=30m --config=./chat-server/.golangci.pipeline.yaml
 
           # Optional: show only new issues if it's a pull request. The default value is `false`.
           # only-new-issues: true
@@ -88,7 +88,7 @@ jobs:
         run: |
           TAG_NAME=${GITHUB_SHA::7}          
           docker buildx create --use
-          docker buildx build --no-cache --push --tag $REGISTRY/$IMAGE_NAME:$TAG_NAME -f auth/Dockerfile auth/
+          docker buildx build --no-cache --push --tag $REGISTRY/$IMAGE_NAME:$TAG_NAME -f chat-server/Dockerfile chat-server/
 
   deploy-image:
     runs-on: ubuntu-latest
