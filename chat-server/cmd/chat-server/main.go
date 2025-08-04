@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	grpcPort = 50002
+	grpcPort = 50052
 )
 
 type server struct {
