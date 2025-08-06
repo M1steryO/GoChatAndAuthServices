@@ -42,8 +42,8 @@ message UpdateUserInfo {
 
 message CreateRequest {
   User user = 1;
-  string password = 3;
-  string password_confirm = 4;
+  string password = 2;
+  string password_confirm = 3;
 }
 
 message CreateResponse {

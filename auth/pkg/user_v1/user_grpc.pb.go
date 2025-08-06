@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v3.20.3
-// source: chat.proto
+// source: user.proto
 
-package user_v1
+package chat_v1
 
 import (
 	context "context"
@@ -20,10 +20,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserV1_Create_FullMethodName = "/chat_v1.UserV1/Create"
-	UserV1_Get_FullMethodName    = "/chat_v1.UserV1/Get"
-	UserV1_Update_FullMethodName = "/chat_v1.UserV1/Update"
-	UserV1_Delete_FullMethodName = "/chat_v1.UserV1/Delete"
+	UserV1_Create_FullMethodName = "/user_v1.UserV1/Create"
+	UserV1_Get_FullMethodName    = "/user_v1.UserV1/Get"
+	UserV1_Update_FullMethodName = "/user_v1.UserV1/Update"
+	UserV1_Delete_FullMethodName = "/user_v1.UserV1/Delete"
 )
 
 // UserV1Client is the client API for UserV1 service.
@@ -211,7 +211,7 @@ func _UserV1_Delete_Handler(srv interface{}, ctx context.Context, dec func(inter
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var UserV1_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "chat_v1.UserV1",
+	ServiceName: "user_v1.UserV1",
 	HandlerType: (*UserV1Server)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -232,5 +232,5 @@ var UserV1_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "chat.proto",
+	Metadata: "user.proto",
 }
