@@ -103,7 +103,6 @@ jobs:
           envs: IMAGE_NAME, REGISTRY, GITHUB_SHA, CONTAINER_NAME
           script: |
             TAG_NAME=${GITHUB_SHA::7}
-            docker-compose -f ./chat-server/docker-compose.dev.yml --env-file ./config/local.env up --build -d
             docker login -u ${{secrets.REGISTRY_USERNAME}} -p ${{secrets.REGISTRY_PASSWORD}} $REGISTRY
             docker stop $CONTAINER_NAME
             docker rm $CONTAINER_NAME

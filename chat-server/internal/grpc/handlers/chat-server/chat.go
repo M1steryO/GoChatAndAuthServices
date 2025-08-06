@@ -4,11 +4,6 @@ import (
 	"chat-server/internal/storage/repository"
 	desc "chat-server/pkg/chat_v1"
 	"context"
-	"errors"
-)
-
-var (
-	errPasswordNotMatch = errors.New("passwords not match")
 )
 
 type Server struct {
