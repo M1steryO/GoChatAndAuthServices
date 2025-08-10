@@ -1,24 +1,25 @@
-package repository
+package chat
 
 import (
+	"chat-server/internal/repository"
+	"chat-server/internal/repository/chat/model"
 	"context"
 	"github.com/jackc/pgx/v4/pgxpool"
-	"time"
 )
 
-type Chat struct {
-	Id        int64
-	Usernames []string
-	CreatedAt time.Time
-	UpdatedAt *time.Time
-}
-type Storage struct {
-	Pool *pgxpool.Pool
+type repo struct {
+	db *pgxpool.Pool
 }
 
-func (s *Storage) CreateChat(ctx context.Context, chat *Chat) (int64, error) {
+func NewChatRepository(db *pgxpool.Pool) repository.ChatRepository {
+	return &repo{
+		db: db,
+	}
+}
+
+func (s *repo) Create(ctx context.Context, chat *model.Chat) (int64, error) {
 	var lastInsertId int64
-	tx, err := s.Pool.Begin(ctx)
+	tx, err := s.db.Begin(ctx)
 
 	defer func() {
 		if err != nil {

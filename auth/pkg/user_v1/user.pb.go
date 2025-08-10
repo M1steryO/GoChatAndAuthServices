@@ -252,7 +252,7 @@ func (x *UpdateUserInfo) GetEmail() *wrapperspb.StringValue {
 
 type CreateRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	User            *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	Info            *UserInfo              `protobuf:"bytes,1,opt,name=info,proto3" json:"info,omitempty"`
 	Password        string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 	PasswordConfirm string                 `protobuf:"bytes,3,opt,name=password_confirm,json=passwordConfirm,proto3" json:"password_confirm,omitempty"`
 	unknownFields   protoimpl.UnknownFields
@@ -289,9 +289,9 @@ func (*CreateRequest) Descriptor() ([]byte, []int) {
 	return file_user_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *CreateRequest) GetUser() *User {
+func (x *CreateRequest) GetInfo() *UserInfo {
 	if x != nil {
-		return x.User
+		return x.Info
 	}
 	return nil
 }
@@ -557,9 +557,9 @@ const file_user_proto_rawDesc = "" +
 	"\x04role\x18\x05 \x01(\x0e2\r.user_v1.RoleR\x04role\"v\n" +
 	"\x0eUpdateUserInfo\x120\n" +
 	"\x04name\x18\x01 \x01(\v2\x1c.google.protobuf.StringValueR\x04name\x122\n" +
-	"\x05email\x18\x02 \x01(\v2\x1c.google.protobuf.StringValueR\x05email\"y\n" +
-	"\rCreateRequest\x12!\n" +
-	"\x04user\x18\x01 \x01(\v2\r.user_v1.UserR\x04user\x12\x1a\n" +
+	"\x05email\x18\x02 \x01(\v2\x1c.google.protobuf.StringValueR\x05email\"}\n" +
+	"\rCreateRequest\x12%\n" +
+	"\x04info\x18\x01 \x01(\v2\x11.user_v1.UserInfoR\x04info\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\x12)\n" +
 	"\x10password_confirm\x18\x03 \x01(\tR\x0fpasswordConfirm\" \n" +
 	"\x0eCreateResponse\x12\x0e\n" +
@@ -619,7 +619,7 @@ var file_user_proto_depIdxs = []int32{
 	0,  // 3: user_v1.UserInfo.role:type_name -> user_v1.Role
 	11, // 4: user_v1.UpdateUserInfo.name:type_name -> google.protobuf.StringValue
 	11, // 5: user_v1.UpdateUserInfo.email:type_name -> google.protobuf.StringValue
-	1,  // 6: user_v1.CreateRequest.user:type_name -> user_v1.User
+	2,  // 6: user_v1.CreateRequest.info:type_name -> user_v1.UserInfo
 	1,  // 7: user_v1.GetResponse.user:type_name -> user_v1.User
 	3,  // 8: user_v1.UpdateRequest.info:type_name -> user_v1.UpdateUserInfo
 	4,  // 9: user_v1.UserV1.Create:input_type -> user_v1.CreateRequest

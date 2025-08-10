@@ -54,7 +54,7 @@ jobs:
 
           # Optional: golangci-lint command line arguments.
           #
-          # Note: By default, the `.golangci.yml` file should be at the root of the repository.
+          # Note: By default, the `.golangci.yml` file should be at the root of the chat.
           # The location of the configuration file can be changed by using `--config=`
           args: --timeout=30m
 

@@ -1,12 +1,14 @@
 package main
 
 import (
+	"chat-server/internal/api/grpc/chat-server"
 	"chat-server/internal/config"
-	chat_server "chat-server/internal/grpc/handlers/chat-server"
-	db "chat-server/internal/storage"
+	"chat-server/internal/repository/chat"
+	chat2 "chat-server/internal/service/chat"
 	desc "chat-server/pkg/chat_v1"
 	"context"
 	"flag"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"log"
@@ -43,19 +45,17 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
+	pool, err := pgxpool.Connect(ctx, dbConfig.GetDSN())
+	if err != nil {
+		log.Fatalf("failed to connect: %v", err)
+	}
+	defer pool.Close()
+	chatRepo := chat.NewChatRepository(pool)
+	chatService := chat2.NewChatService(chatRepo)
+
 	s := grpc.NewServer()
 	reflection.Register(s)
-
-	storage, err := db.NewStorage(ctx, dbConfig)
-	if err != nil {
-		log.Fatalf("failed to connect to storage: %v", err)
-	}
-
-	defer storage.Pool.Close()
-
-	desc.RegisterChatV1Server(s, &chat_server.Server{
-		Storage: storage,
-	})
+	desc.RegisterChatV1Server(s, chat_server.NewImplementation(chatService))
 
 	log.Printf("server listening at %v", lis.Addr())
 	if err = s.Serve(lis); err != nil {

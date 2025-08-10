@@ -1,13 +1,13 @@
-package repository
+package user
 
 import (
-	utils "auth/internal/utils/storage"
+	"auth/internal/repository"
+	modelRepo "auth/internal/repository/user/model"
 	"context"
 	"errors"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/lib/pq"
-	"time"
 )
 
 var (
@@ -15,28 +15,25 @@ var (
 	ErrUserExists   = errors.New("user exists")
 )
 
-type User struct {
-	Id        int64
-	Email     string
-	Name      string
-	Role      int
-	Password  string
-	CreatedAt time.Time
-	UpdatedAt *time.Time
-}
-type Storage struct {
-	Pool *pgxpool.Pool
+type repo struct {
+	pool *pgxpool.Pool
 }
 
-func (s *Storage) GetUser(ctx context.Context, id int64) (*User, error) {
-	user := User{}
+func NewUserRepository(pool *pgxpool.Pool) repository.UserRepository {
+	return &repo{
+		pool: pool,
+	}
+}
+
+func (s *repo) Get(ctx context.Context, id int64) (*modelRepo.User, error) {
+	user := modelRepo.User{}
 	var role string
-	err := s.Pool.QueryRow(ctx,
+	err := s.pool.QueryRow(ctx,
 		`SELECT id, email, name, created_at, updated_at, role
 			 FROM "user"
 			 WHERE id=$1`,
-		id).Scan(&user.Id, &user.Email,
-		&user.Name, &user.CreatedAt,
+		id).Scan(&user.Id, &user.Info.Email,
+		&user.Info.Name, &user.CreatedAt,
 		&user.UpdatedAt, &role)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
@@ -44,17 +41,16 @@ func (s *Storage) GetUser(ctx context.Context, id int64) (*User, error) {
 		}
 		return nil, err
 	}
-	user.Role = utils.GetRoleIdByStr(role)
 	return &user, nil
 }
 
-func (s *Storage) CreateUser(ctx context.Context, user User) (int64, error) {
+func (s *repo) Create(ctx context.Context, user *modelRepo.User) (int64, error) {
 	var lastInsertId int64
-	err := s.Pool.QueryRow(ctx,
+	err := s.pool.QueryRow(ctx,
 		`INSERT INTO "user" (email, name, password, role) 
 			 VALUES ($1, $2, $3, $4) 
 			 RETURNING id;`,
-		user.Email, user.Name, user.Password, user.Role).Scan(&lastInsertId)
+		user.Info.Email, user.Info.Name, user.Password, user.Info.Role).Scan(&lastInsertId)
 	if err != nil {
 		var pqErr *pq.Error
 		if errors.As(err, &pqErr) {
