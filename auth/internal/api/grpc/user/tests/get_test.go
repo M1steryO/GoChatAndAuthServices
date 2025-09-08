@@ -2,8 +2,8 @@ package tests
 
 import (
 	"auth/internal/api/grpc/user"
+	"auth/internal/logger"
 	"auth/internal/model"
-	"auth/internal/model/auth"
 	"auth/internal/service"
 	"auth/internal/service/mocks"
 	desc "auth/pkg/user_v1"
@@ -19,7 +19,7 @@ import (
 
 func TestGet(t *testing.T) {
 	type userServiceMockFunc func(mc *minimock.Controller) service.UserService
-
+	logger.Init("local")
 	type args struct {
 		ctx context.Context
 		req *desc.GetRequest
@@ -30,7 +30,7 @@ func TestGet(t *testing.T) {
 
 		id        = gofakeit.Int64()
 		name      = gofakeit.Name()
-		email     = gofakeit.Email()
+		username  = gofakeit.Username()
 		createdAt = gofakeit.Date()
 		updatedAt = sql.NullTime{Valid: true, Time: createdAt}
 		role      = "ADMIN"
@@ -43,10 +43,10 @@ func TestGet(t *testing.T) {
 
 		serviceResp = &model.User{
 			Id: id,
-			Info: auth.UserInfo{
-				Name:  name,
-				Email: email,
-				Role:  role,
+			Info: model.UserInfo{
+				Name:     name,
+				Username: username,
+				Role:     role,
 			},
 			CreatedAt: createdAt,
 			UpdatedAt: updatedAt,
@@ -56,9 +56,9 @@ func TestGet(t *testing.T) {
 			User: &desc.User{
 				Id: id,
 				Info: &desc.UserInfo{
-					Name:  name,
-					Email: email,
-					Role:  desc.Role_ADMIN,
+					Name:     name,
+					Username: username,
+					Role:     desc.Role_ADMIN,
 				},
 				CreatedAt: timestamppb.New(createdAt),
 				UpdatedAt: timestamppb.New(updatedAt.Time),

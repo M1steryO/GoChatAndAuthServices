@@ -2,8 +2,8 @@ package tests
 
 import (
 	"auth/internal/api/grpc/user"
+	"auth/internal/logger"
 	"auth/internal/model"
-	"auth/internal/model/auth"
 	"auth/internal/service"
 	"auth/internal/service/mocks"
 	desc "auth/pkg/user_v1"
@@ -17,7 +17,7 @@ import (
 
 func TestCreate(t *testing.T) {
 	type userServiceMockFunc func(mc *minimock.Controller) service.UserService
-
+	logger.Init("local")
 	type args struct {
 		ctx context.Context
 		req *desc.CreateRequest
@@ -28,7 +28,7 @@ func TestCreate(t *testing.T) {
 
 		id       = gofakeit.Int64()
 		name     = gofakeit.Name()
-		email    = gofakeit.Email()
+		username = gofakeit.Username()
 		role     = "ADMIN"
 		password = gofakeit.Password(true, true, true, true, true, 1)
 
@@ -36,19 +36,19 @@ func TestCreate(t *testing.T) {
 
 		req = &desc.CreateRequest{
 			Info: &desc.UserInfo{
-				Name:  name,
-				Email: email,
-				Role:  desc.Role_ADMIN,
+				Name:     name,
+				Username: username,
+				Role:     desc.Role_ADMIN,
 			},
 			Password:        password,
 			PasswordConfirm: password,
 		}
 
 		serviceReq = &model.CreateUserModel{
-			Info: auth.UserInfo{
-				Name:  name,
-				Email: email,
-				Role:  role,
+			Info: model.UserInfo{
+				Name:     name,
+				Username: username,
+				Role:     role,
 			},
 			Password:        password,
 			ConfirmPassword: password,
