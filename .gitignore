@@ -9,6 +9,7 @@ auth/service.pem
 auth/ca.cert
 auth/ca.key
 auth/ca.srl
+platform_common/
 
 /.idea
 
