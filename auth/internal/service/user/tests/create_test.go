@@ -1,16 +1,15 @@
 package tests
 
 import (
-	"auth/internal/client/db"
-	txMocks "auth/internal/client/db/mocks"
 	"auth/internal/model"
-	"auth/internal/model/auth"
 	"auth/internal/repository"
 	"auth/internal/repository/mocks"
 	modelRepo "auth/internal/repository/user/model"
 	"auth/internal/service/user"
 	"context"
 	"fmt"
+	"github.com/M1steryO/platform_common/pkg/db"
+	txMocks "github.com/M1steryO/platform_common/pkg/db/mocks"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/gojuno/minimock/v3"
 	"github.com/stretchr/testify/require"
@@ -36,24 +35,24 @@ func TestCreate(t *testing.T) {
 
 		id       = gofakeit.Int64()
 		name     = gofakeit.Name()
-		email    = gofakeit.Email()
+		username = gofakeit.Username()
 		role     = "ADMIN"
 		password = gofakeit.Password(true, true, true, true, true, 1)
 
 		correctReq = &model.CreateUserModel{
-			Info: auth.UserInfo{
-				Email: email,
-				Name:  name,
-				Role:  role,
+			Info: model.UserInfo{
+				Username: username,
+				Name:     name,
+				Role:     role,
 			},
 			Password:        password,
 			ConfirmPassword: password,
 		}
 		unMactchedPasswordsReq = &model.CreateUserModel{
-			Info: auth.UserInfo{
-				Email: email,
-				Name:  name,
-				Role:  role,
+			Info: model.UserInfo{
+				Username: username,
+				Name:     name,
+				Role:     role,
 			},
 			Password:        password,
 			ConfirmPassword: password[1:],
@@ -81,7 +80,7 @@ func TestCreate(t *testing.T) {
 				mock := mocks.NewUserRepositoryMock(mc)
 				mock.CreateMock.Set(func(ctx context.Context, u *modelRepo.User) (int64, error) {
 					require.Equal(t, name, u.Info.Name)
-					require.Equal(t, email, u.Info.Email)
+					require.Equal(t, username, u.Info.Username)
 					require.Equal(t, role, u.Info.Role)
 					require.NoError(t, bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password)))
 					return id, nil

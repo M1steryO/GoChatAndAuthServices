@@ -1,10 +1,7 @@
 package tests
 
 import (
-	"auth/internal/client/db"
-	txMocks "auth/internal/client/db/mocks"
 	"auth/internal/model"
-	"auth/internal/model/auth"
 	"auth/internal/repository"
 	"auth/internal/repository/mocks"
 	modelRepo "auth/internal/repository/user/model"
@@ -12,6 +9,8 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"github.com/M1steryO/platform_common/pkg/db"
+	txMocks "github.com/M1steryO/platform_common/pkg/db/mocks"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/gojuno/minimock/v3"
 	"github.com/stretchr/testify/require"
@@ -35,16 +34,16 @@ func TestGet(t *testing.T) {
 
 		id        = gofakeit.Int64()
 		name      = gofakeit.Name()
-		email     = gofakeit.Email()
+		username  = gofakeit.Username()
 		role      = "ADMIN"
 		createdAt = gofakeit.Date()
 		updatedAt = gofakeit.Date()
 
 		resp = &model.User{
-			Info: auth.UserInfo{
-				Email: email,
-				Name:  name,
-				Role:  role,
+			Info: model.UserInfo{
+				Name:     name,
+				Username: username,
+				Role:     role,
 			},
 			CreatedAt: createdAt,
 			UpdatedAt: sql.NullTime{
@@ -54,9 +53,9 @@ func TestGet(t *testing.T) {
 		}
 		repoResp = &modelRepo.User{
 			Info: modelRepo.UserInfo{
-				Email: email,
-				Name:  name,
-				Role:  role,
+				Username: username,
+				Name:     name,
+				Role:     role,
 			},
 			CreatedAt: createdAt,
 			UpdatedAt: sql.NullTime{

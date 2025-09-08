@@ -2,7 +2,6 @@ package tracing
 
 import (
 	"github.com/uber/jaeger-client-go/config"
-	"go.uber.org/zap"
 	"log/slog"
 )
 
@@ -19,6 +18,6 @@ func Init(logger *slog.Logger, serviceName string) {
 
 	_, err := cfg.InitGlobalTracer(serviceName)
 	if err != nil {
-		logger.Error("failed to init tracing", zap.Error(err))
+		logger.Error("failed to init tracing: ", err.Error())
 	}
 }
