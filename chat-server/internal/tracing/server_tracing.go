@@ -18,6 +18,6 @@ func Init(logger *slog.Logger, serviceName string) {
 
 	_, err := cfg.InitGlobalTracer(serviceName)
 	if err != nil {
-		logger.Error("failed to init tracing: ", err.Error())
+		logger.Error("failed to init tracing", "error", err)
 	}
 }
