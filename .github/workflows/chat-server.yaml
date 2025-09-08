@@ -7,10 +7,10 @@ on:
     branches: [ main, master ]
 
 
-env:
-#  REGISTRY: "cr.selcloud.ru/test"
-#  IMAGE_NAME: "chat-server"
-#  CONTAINER_NAME: "chat-server-container"
+#env:
+##  REGISTRY: "cr.selcloud.ru/test"
+##  IMAGE_NAME: "chat-server"
+##  CONTAINER_NAME: "chat-server-container"
 
 jobs:
   build-and-test:

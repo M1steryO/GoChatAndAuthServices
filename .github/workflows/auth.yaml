@@ -7,10 +7,10 @@ on:
     branches: [ main, master ]
 
 
-env:
-#  REGISTRY: "cr.selcloud.ru/test"
-#  IMAGE_NAME: "auth-server"
-#  CONTAINER_NAME: "auth-server-container"
+#env:
+##  REGISTRY: "cr.selcloud.ru/test"
+##  IMAGE_NAME: "auth-server"
+##  CONTAINER_NAME: "auth-server-container"
 
 jobs:
   build-and-test:
