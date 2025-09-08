@@ -3,7 +3,11 @@ package interceptor
 import (
 	"chat-server/internal/client/rpc"
 	"context"
+	"github.com/opentracing/opentracing-go"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 )
 
 const jwtPrefix = "Bearer "
@@ -18,17 +22,17 @@ func NewAccessInterceptor(cl rpc.AuthServiceClient) *AccessInterceptor {
 }
 
 func (a *AccessInterceptor) Unary(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-	//accessToken := exampleAccessToken
-	//md := metadata.New(map[string]string{"Authorization": jwtPrefix + accessToken})
-	//ctx = metadata.NewOutgoingContext(ctx, md)
-	//
-	//span, ctx := opentracing.StartSpanFromContext(ctx, "check access")
-	//defer span.Finish()
-	//span.SetTag("endpointAddress", info.FullMethod)
-	//err := a.client.Check(ctx, info.FullMethod)
-	//
-	//if err != nil {
-	//	return nil, status.Error(codes.Unauthenticated, "invalid token")
-	//}
+	accessToken := exampleAccessToken
+	md := metadata.New(map[string]string{"Authorization": jwtPrefix + accessToken})
+	ctx = metadata.NewOutgoingContext(ctx, md)
+
+	span, ctx := opentracing.StartSpanFromContext(ctx, "check access")
+	defer span.Finish()
+	span.SetTag("endpointAddress", info.FullMethod)
+	err := a.client.Check(ctx, info.FullMethod)
+
+	if err != nil {
+		return nil, status.Error(codes.Unauthenticated, "invalid token")
+	}
 	return handler(ctx, req)
 }
