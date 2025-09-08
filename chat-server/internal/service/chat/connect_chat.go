@@ -11,7 +11,7 @@ func (s *serv) ConnectChat(ctx context.Context, chatId int64, username string, s
 	chatChannel, ok := s.channels[chatId]
 	s.mxChannel.RUnlock()
 	if !ok {
-		return chat.ChatNotFoundError
+		return chat.ErrChatNotFound
 	}
 
 	s.mxChat.Lock()

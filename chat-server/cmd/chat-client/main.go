@@ -5,7 +5,6 @@ import (
 	"chat-server/internal/logger"
 	desc "chat-server/pkg/chat_v1"
 	"context"
-	"fmt"
 	"github.com/fatih/color"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -24,7 +23,13 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	defer conn.Close()
+
+	defer func() {
+		if err := conn.Close(); err != nil {
+			log.Printf("failed to close conn: %v", err)
+		}
+	}()
+
 	client := desc.NewChatV1Client(conn)
 	chat, err := client.Create(ctx, &desc.CreateRequest{
 		Chat: &desc.Chat{
@@ -77,11 +82,11 @@ func connectServer(ctx context.Context, client desc.ChatV1Client, chatID int64, 
 				log.Fatalf("Failed to receive message: %s", err.Error())
 			}
 			if res.GetFrom() != username {
-				log.Println(fmt.Sprintf("[%v] - [from: %s]: %s\n",
+				log.Printf("[%v] - [from: %s]: %s\n",
 					color.YellowString(res.GetTimestamp().AsTime().Format(time.RFC3339)),
 					color.BlueString(res.GetFrom()),
 					res.GetText(),
-				))
+				)
 			}
 
 		}

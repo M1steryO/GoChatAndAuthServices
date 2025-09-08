@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-var ChatNotFoundError = errors.New("chat not found")
+var ErrChatNotFound = errors.New("chat not found")
 
 type repo struct {
 	db db.Client
@@ -64,7 +64,7 @@ func (s *repo) Get(ctx context.Context, chatId int64) (*model.Chat, error) {
 	}, chatId)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, ChatNotFoundError
+			return nil, ErrChatNotFound
 		}
 		return nil, err
 	}
