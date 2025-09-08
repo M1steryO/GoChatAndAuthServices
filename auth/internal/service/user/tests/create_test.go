@@ -58,7 +58,6 @@ func TestCreate(t *testing.T) {
 			ConfirmPassword: password[1:],
 		}
 	)
-	defer t.Cleanup(mc.Finish)
 
 	tests := []struct {
 		name               string

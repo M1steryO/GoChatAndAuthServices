@@ -9,8 +9,8 @@ import (
 )
 
 type Streams struct {
-	streams map[string]service.Stream //nolint:unused
-	m       sync.RWMutex              //nolint:unused
+	streams map[string]service.Stream //nolint
+	m       sync.RWMutex              //nolint
 }
 type serv struct {
 	db        repository.ChatRepository

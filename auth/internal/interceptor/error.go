@@ -18,13 +18,13 @@ type GRPCStatusInterface interface {
 	GRPCStatus() *status.Status
 }
 
-func ErrorCodesInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (res interface{}, err error) {
+func ErrorCodesInterceptor(ctx context.Context, req interface{}, _ *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (res interface{}, err error) {
 	res, err = handler(ctx, req)
 	if nil == err {
 		return res, nil
 	}
 
-	fmt.Printf(color.RedString("error: %s\n", err.Error()))
+	fmt.Print(color.RedString("error: %s\n", err.Error()))
 
 	switch {
 	case sys.IsCommonError(err):
