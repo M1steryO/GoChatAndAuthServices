@@ -1,12 +1,12 @@
 package app
 
 import (
-	"chat-server/internal/closer"
 	"chat-server/internal/config"
 	"chat-server/internal/interceptor"
 	"chat-server/internal/logger"
 	"chat-server/internal/tracing"
 	desc "chat-server/pkg/chat_v1"
+	"github.com/M1steryO/platform_common/pkg/closer"
 	grpcMiddleware "github.com/grpc-ecosystem/go-grpc-middleware"
 
 	"context"
@@ -88,6 +88,7 @@ func (a *App) initGRPCServer(ctx context.Context) error {
 		grpc.UnaryInterceptor(
 			grpcMiddleware.ChainUnaryServer(
 				interceptor.ServerTracingInterceptor,
+				interceptor.ErrorCodesInterceptor,
 				interceptor.NewAccessInterceptor(a.serviceProvider.AuthGRPCClient()).Unary,
 				interceptor.LoggerInterceptor),
 		))

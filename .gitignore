@@ -3,6 +3,12 @@ auth/bin/
 chat-server/bin
 chat-server/.idea
 platform_common/.idea
+auth/service.csr
+auth/service.key
+auth/service.pem
+auth/ca.cert
+auth/ca.key
+auth/ca.srl
 
 /.idea
 

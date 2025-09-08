@@ -1,9 +1,9 @@
 package user
 
 import (
-	"auth/internal/client/db"
 	"auth/internal/repository"
 	"auth/internal/service"
+	"github.com/M1steryO/platform_common/pkg/db"
 )
 
 type serv struct {

@@ -1,11 +1,11 @@
 package user
 
 import (
-	"auth/internal/client/db"
 	"auth/internal/repository"
 	modelRepo "auth/internal/repository/user/model"
 	"context"
 	"errors"
+	"github.com/M1steryO/platform_common/pkg/db"
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgx/v4"
 )

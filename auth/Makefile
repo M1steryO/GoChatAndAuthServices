@@ -140,12 +140,18 @@ vendor-proto:
 
 
 gen-cert:
-	openssl genrsa -out ca.key 4096
-	openssl req -new -x509 -key ca.key -sha256 -subj "/C=US/ST=NJ/O=CA, Inc." -days 365 -out ca.cert
-	openssl genrsa -out service.key 4096
-	openssl req -new -key service.key -out service.csr -config certificate.conf
-	openssl x509 -req -in service.csr -CA ca.cert -CAkey ca.key -CAcreateserial \
-    		-out service.pem -days 365 -sha256 -extfile certificate.conf -extensions req_ext
+		# Генерируем приватный ключ для собственного CA (центра сертификации)\
+        openssl genrsa -out ca.key 4096 \
+        # Создаём самоподписанный сертификат CA (будет использоваться для подписи других сертификатов) \
+        openssl req -new -x509 -key ca.key -sha256 -subj "/C=US/ST=NJ/O=CA, Inc." -days 365 -out ca.cert \
+        # Генерируем приватный ключ для сервиса\
+        openssl genrsa -out service.key 4096 \
+        # Создаём CSR (Certificate Signing Request) для сервиса, используя его ключ и конфиг \
+        openssl req -new -key service.key -out service.csr -config certificate.conf \
+        # Подписываем CSR с помощью CA, выдаём сервису готовый сертификат \
+        openssl x509 -req -in service.csr -CA ca.cert -CAkey ca.key -CAcreateserial \
+            -out service.pem -days 365 -sha256 -extfile certificate.conf -extensions req_ext \
+
 
 
 grpc-load-test:

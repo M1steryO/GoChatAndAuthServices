@@ -10,7 +10,7 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v1.2.1
 	github.com/fatih/color v1.18.0
 	github.com/georgysavva/scany v1.2.3
-	github.com/gojuno/minimock/v3 v3.4.5
+	github.com/gojuno/minimock/v3 v3.4.7
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.1
 	github.com/grpc-ecosystem/grpc-opentracing v0.0.0-20180507213350-8e809c8a8645
@@ -29,6 +29,7 @@ require (
 )
 
 require (
+	github.com/M1steryO/platform_common v0.0.0-20250908100315-155b42a7641b // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect

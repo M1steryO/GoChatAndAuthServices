@@ -1,10 +1,10 @@
 package chat
 
 import (
-	"chat-server/internal/client/db"
 	"chat-server/internal/model"
 	"chat-server/internal/repository"
 	"chat-server/internal/service"
+	"github.com/M1steryO/platform_common/pkg/db"
 	"sync"
 )
 

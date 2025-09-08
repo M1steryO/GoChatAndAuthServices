@@ -1,13 +1,13 @@
 package chat
 
 import (
-	"chat-server/internal/client/db"
 	"chat-server/internal/repository"
 	"chat-server/internal/repository/chat/model"
 	"context"
 	"database/sql"
 	"errors"
 	"fmt"
+	"github.com/M1steryO/platform_common/pkg/db"
 	"strings"
 )
 
