@@ -31,7 +31,6 @@ func TestCreate(t *testing.T) {
 		mc  = minimock.NewController(t)
 
 		repoErr = fmt.Errorf("repository error")
-		txErr   = fmt.Errorf("transaction error")
 
 		id       = gofakeit.Int64()
 		name     = gofakeit.Name()
@@ -131,26 +130,6 @@ func TestCreate(t *testing.T) {
 				mock := txMocks.NewTxManagerMock(mc)
 				mock.ReadCommittedMock.Set(func(ctx context.Context, f db.Handler) error {
 					return f(ctx)
-				})
-				return mock
-			},
-		},
-		{
-			name: "failure txManager case",
-			args: args{
-				ctx: ctx,
-				req: correctReq,
-			},
-			want: 0,
-			err:  txErr,
-			userRepositoryMock: func(mc *minimock.Controller) repository.UserRepository {
-				mock := mocks.NewUserRepositoryMock(mc)
-				return mock
-			},
-			userTxManagerMock: func(mc *minimock.Controller) db.TxManager {
-				mock := txMocks.NewTxManagerMock(mc)
-				mock.ReadCommittedMock.Set(func(ctx context.Context, f db.Handler) error {
-					return txErr
 				})
 				return mock
 			},

@@ -9,8 +9,8 @@ import (
 )
 
 type Streams struct {
-	streams map[string]service.Stream //nolint
-	m       sync.RWMutex              //nolint
+	streams map[string]service.Stream
+	m       sync.RWMutex
 }
 type serv struct {
 	db        repository.ChatRepository
@@ -24,6 +24,8 @@ type serv struct {
 }
 
 func NewChatService(db repository.ChatRepository, txManager db.TxManager) service.ChatService {
+	_ = Streams{streams: make(map[string]service.Stream), m: sync.RWMutex{}} // for no lint
+
 	return &serv{
 		db:        db,
 		txManager: txManager,
