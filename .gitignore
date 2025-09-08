@@ -2,6 +2,7 @@ auth/.idea
 auth/bin/
 chat-server/bin
 chat-server/.idea
+platform_common/.idea
 
 /.idea
 

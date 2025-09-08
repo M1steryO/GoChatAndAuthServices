@@ -7,7 +7,7 @@ import (
 )
 
 func (i *Implementation) Create(ctx context.Context, request *desc.CreateRequest) (*desc.CreateResponse, error) {
-	id, err := i.service.Create(ctx, converter.ToChatServiceFromApi(request.GetChat()))
+	id, err := i.service.Create(ctx, converter.ToChatServiceFromApi(request.Chat))
 	if err != nil {
 		return nil, err
 	}

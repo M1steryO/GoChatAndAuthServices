@@ -14,9 +14,9 @@ type User struct {
 }
 
 type UserInfo struct {
-	Email string
-	Name  string
-	Role  string
+	Username string
+	Name     string
+	Role     string
 }
 
 type CreateUserModel struct {

@@ -7,9 +7,22 @@ import (
 )
 
 func (s *serv) Create(ctx context.Context, chat *model.Chat) (int64, error) {
-	id, err := s.db.Create(ctx, converter.ToChatRepoFromService(chat))
+
+	var chatId int64
+	err := s.txManager.ReadCommitted(ctx, func(ctx context.Context) error {
+		id, err := s.db.Create(ctx, converter.ToChatRepoFromService(chat))
+		chatId = id
+
+		return err
+	})
+	s.mxChannel.Lock()
+	
+	if _, ok := s.channels[chatId]; !ok {
+		s.channels[chatId] = make(chan *model.Message, 100)
+	}
+	s.mxChannel.Unlock()
 	if err != nil {
 		return 0, err
 	}
-	return id, nil
+	return chatId, nil
 }

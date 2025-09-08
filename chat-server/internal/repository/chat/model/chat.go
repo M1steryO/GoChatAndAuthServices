@@ -11,3 +11,9 @@ type Chat struct {
 	CreatedAt time.Time    `db:"created_at"`
 	UpdatedAt sql.NullTime `db:"updated_at"`
 }
+
+type Message struct {
+	From      string    `db:"from"`
+	Text      string    `db:"text"`
+	Timestamp time.Time `db:"timestamp"`
+}

@@ -1,16 +1,33 @@
 package chat
 
 import (
+	"chat-server/internal/client/db"
+	"chat-server/internal/model"
 	"chat-server/internal/repository"
 	"chat-server/internal/service"
+	"sync"
 )
 
+type Streams struct {
+	streams map[string]service.Stream
+	m       sync.RWMutex
+}
 type serv struct {
-	db repository.ChatRepository
+	db        repository.ChatRepository
+	txManager db.TxManager
+
+	chats  map[int64]*Streams
+	mxChat sync.RWMutex
+
+	channels  map[int64]chan *model.Message
+	mxChannel sync.RWMutex
 }
 
-func NewChatService(db repository.ChatRepository) service.ChatService {
+func NewChatService(db repository.ChatRepository, txManager db.TxManager) service.ChatService {
 	return &serv{
-		db: db,
+		db:        db,
+		txManager: txManager,
+		chats:     make(map[int64]*Streams),
+		channels:  make(map[int64]chan *model.Message),
 	}
 }

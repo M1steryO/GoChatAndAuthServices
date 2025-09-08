@@ -3,7 +3,7 @@ create type user_role AS ENUM ('USER', 'ADMIN');
 create table "user"
 (
     id         serial primary key,
-    email      varchar(255) unique not null,
+    username      varchar(255) unique not null,
     name       varchar(255)        not null,
     role       user_role           not null default 'USER',
     password   varchar(255)        not null,

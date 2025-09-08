@@ -23,6 +23,7 @@ const (
 	ChatV1_Create_FullMethodName      = "/chat_v1.ChatV1/Create"
 	ChatV1_Delete_FullMethodName      = "/chat_v1.ChatV1/Delete"
 	ChatV1_SendMessage_FullMethodName = "/chat_v1.ChatV1/SendMessage"
+	ChatV1_ConnectChat_FullMethodName = "/chat_v1.ChatV1/ConnectChat"
 )
 
 // ChatV1Client is the client API for ChatV1 service.
@@ -32,6 +33,7 @@ type ChatV1Client interface {
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	SendMessage(ctx context.Context, in *SendMessageRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	ConnectChat(ctx context.Context, in *ConnectChatRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Message], error)
 }
 
 type chatV1Client struct {
@@ -72,6 +74,25 @@ func (c *chatV1Client) SendMessage(ctx context.Context, in *SendMessageRequest, 
 	return out, nil
 }
 
+func (c *chatV1Client) ConnectChat(ctx context.Context, in *ConnectChatRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Message], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &ChatV1_ServiceDesc.Streams[0], ChatV1_ConnectChat_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[ConnectChatRequest, Message]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type ChatV1_ConnectChatClient = grpc.ServerStreamingClient[Message]
+
 // ChatV1Server is the server API for ChatV1 service.
 // All implementations must embed UnimplementedChatV1Server
 // for forward compatibility.
@@ -79,6 +100,7 @@ type ChatV1Server interface {
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	Delete(context.Context, *DeleteRequest) (*emptypb.Empty, error)
 	SendMessage(context.Context, *SendMessageRequest) (*emptypb.Empty, error)
+	ConnectChat(*ConnectChatRequest, grpc.ServerStreamingServer[Message]) error
 	mustEmbedUnimplementedChatV1Server()
 }
 
@@ -97,6 +119,9 @@ func (UnimplementedChatV1Server) Delete(context.Context, *DeleteRequest) (*empty
 }
 func (UnimplementedChatV1Server) SendMessage(context.Context, *SendMessageRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendMessage not implemented")
+}
+func (UnimplementedChatV1Server) ConnectChat(*ConnectChatRequest, grpc.ServerStreamingServer[Message]) error {
+	return status.Errorf(codes.Unimplemented, "method ConnectChat not implemented")
 }
 func (UnimplementedChatV1Server) mustEmbedUnimplementedChatV1Server() {}
 func (UnimplementedChatV1Server) testEmbeddedByValue()                {}
@@ -173,6 +198,17 @@ func _ChatV1_SendMessage_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ChatV1_ConnectChat_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(ConnectChatRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(ChatV1Server).ConnectChat(m, &grpc.GenericServerStream[ConnectChatRequest, Message]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type ChatV1_ConnectChatServer = grpc.ServerStreamingServer[Message]
+
 // ChatV1_ServiceDesc is the grpc.ServiceDesc for ChatV1 service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -193,6 +229,12 @@ var ChatV1_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ChatV1_SendMessage_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "ConnectChat",
+			Handler:       _ChatV1_ConnectChat_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "chat.proto",
 }

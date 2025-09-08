@@ -20,4 +20,4 @@ create table "chat_member"
 
 -- +goose Down
 drop table chat;
-drop table chat_members
+drop table chat_member;

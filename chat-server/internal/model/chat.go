@@ -11,3 +11,9 @@ type Chat struct {
 	CreatedAt time.Time
 	UpdatedAt sql.NullTime
 }
+
+type Message struct {
+	From      string
+	Text      string
+	Timestamp time.Time
+}

@@ -7,9 +7,9 @@ import (
 
 func ToUserInfoFromRepo(user modelRepo.UserInfo) model.UserInfo {
 	return model.UserInfo{
-		Name:  user.Name,
-		Email: user.Email,
-		Role:  user.Role,
+		Name:     user.Name,
+		Username: user.Username,
+		Role:     user.Role,
 	}
 }
 

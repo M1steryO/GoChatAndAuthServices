@@ -4,7 +4,7 @@
 // - protoc             v3.20.3
 // source: user.proto
 
-package chat_v1
+package user_v1
 
 import (
 	context "context"
